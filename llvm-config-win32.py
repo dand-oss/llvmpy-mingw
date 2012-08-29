@@ -13,41 +13,53 @@ if sys.argv[1] == '--version':
     # Hardcoded extraction, only tested on llvm 3.1
     result = os.popen(cmd).read().split('\n')[1].strip().split(' ')[2]
     print result
+elif sys.argv[1] == '--ldflags':
+    for ldflag in """
+imagehlp
+psapi
+""".split():
+        print('-l%s' % ldflag)
 elif sys.argv[1] == '--libs':
     # NOTE: instead of actually looking at the components requested,
     #       we just spit out a bunch of libs
     for lib in """
-LLVMAnalysis
-LLVMAsmParser
-LLVMAsmPrinter
-LLVMBitReader
-LLVMBitWriter
-LLVMCodeGen
-LLVMCore
-LLVMExecutionEngine
-LLVMInstCombine
-LLVMInstrumentation
-LLVMInterpreter
-LLVMipa
-LLVMipo
-LLVMJIT
+LLVMNVPTXCodeGen
+LLVMNVPTXDesc
+LLVMNVPTXInfo
+LLVMNVPTXAsmPrinter
 LLVMLinker
-LLVMMC
-LLVMMCParser
-LLVMScalarOpts
-LLVMSelectionDAG
-LLVMSupport
-LLVMTarget
-LLVMTransformUtils
+LLVMArchive
+LLVMAsmParser
+LLVMipo
 LLVMVectorize
-LLVMX86AsmParser
-LLVMX86AsmPrinter
+LLVMInstrumentation
+LLVMBitWriter
+LLVMBitReader
+LLVMInterpreter
+LLVMX86Disassembler
 LLVMX86CodeGen
+LLVMSelectionDAG
+LLVMAsmPrinter
+LLVMX86AsmParser
+LLVMMCParser
 LLVMX86Desc
-LLVMX86Info
+LLVMX86AsmPrinter
 LLVMX86Utils
-Advapi32
-Shell32
+LLVMX86Info
+LLVMJIT
+LLVMRuntimeDyld
+LLVMCodeGen
+LLVMExecutionEngine
+LLVMScalarOpts
+LLVMInstCombine
+LLVMTransformUtils
+LLVMipa
+LLVMAnalysis
+LLVMTarget
+LLVMMC
+LLVMObject
+LLVMCore
+LLVMSupport
 """.split():
         print('-l%s' % lib)
     llvmbin = find_path_of('llvm-tblgen.exe')
@@ -69,7 +81,7 @@ elif sys.argv[1] == '--libdir':
     if llvmbin is None:
         raise RuntimeError('Could not find LLVM')
     libdir = os.path.abspath(os.path.join(llvmbin, '../lib'))
-    if not os.path.exists(os.path.join(libdir, 'LLVMCore.lib')):
+    if not os.path.exists(os.path.join(libdir, 'libLLVMCore.a')):
         raise RuntimeError('Could not find LLVM lib dir')
     print libdir
 else:
