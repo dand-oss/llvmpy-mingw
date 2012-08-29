@@ -14,11 +14,18 @@ if sys.argv[1] == '--version':
     result = os.popen(cmd).read().split('\n')[1].strip().split(' ')[2]
     print result
 elif sys.argv[1] == '--ldflags':
-    for ldflag in """
+    for winlib in """
 imagehlp
 psapi
 """.split():
-        print('-l%s' % ldflag)
+        print('-l%s' % winlib)
+    # static link mingw dll content to avoid distribution
+    for winopt in """
+-static-libgcc
+-static-libstdc++
+""".split():
+        print('%s' % winopt)
+    # static link mingw dll content to avoid distribution
 elif sys.argv[1] == '--libs':
     # NOTE: instead of actually looking at the components requested,
     #       we just spit out a bunch of libs
