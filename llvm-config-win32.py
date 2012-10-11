@@ -11,7 +11,8 @@ def find_path_of(filename, envvar='PATH'):
 if sys.argv[1] == '--version':
     cmd = 'llvm-tblgen --version'
     # Hardcoded extraction, only tested on llvm 3.1
-    result = os.popen(cmd).read().split('\n')[1].strip().split(' ')[2]
+    #result = os.popen(cmd).read().split('\n')[1].strip().split(' ')[2]
+    result = "99999.9999"
     print result
 elif sys.argv[1] == '--ldflags':
     for winlib in """
